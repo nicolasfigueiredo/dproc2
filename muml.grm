@@ -24,12 +24,22 @@
 exp
   : %try blockExp SEMI expsequence => ( A.Sequence(blockExp :: expsequence) )
   | %try blockExp
+  | %try blockDecl SEMI declSequence => ( A.Sequence(blockDecl :: declSequence) )
   | blockDecl SEMI => ( blockDecl )
   ;
 
 expsequence
   : %try blockExp SEMI expsequence => ( blockExp :: expsequence )
   | %try blockExp => ( [blockExp] )
+  ;
+
+declSequence
+  : %try blockDecl SEMI declSequence => ( blockDecl :: declSequence )
+  | %try blockDecl => ( [blockDecl] )
+  ;
+
+  blockDecl
+  : KW_decl ID => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
   ;
 
 blockExp
@@ -100,7 +110,3 @@ valdec
 fundec
   : ID fnArgs OP exp %where ( OP = "=" ) => ( A.Valdec(A.Name(ref (A.create_symbol ID)), true, A.Fn(fnArgs, exp)) )
   ;
-
-blockDecl
-  : KW_decl ID => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
-  ; 
