@@ -14,6 +14,9 @@
   | LP ("(") | RP (")") | COMMA (",") | SEMI (";")| COLON (":")
   | LB ("[") | RB ("]")
   | ARROW ("=>") | TARROW ("->")
+
+
+  | CON_float of real | KW_decl of string
   ;
 
 %start exp;
@@ -21,6 +24,7 @@
 exp
   : %try blockExp SEMI expsequence => ( A.Sequence(blockExp :: expsequence) )
   | %try blockExp
+  | blockDecl SEMI => ( blockDecl )
   ;
 
 expsequence
@@ -96,3 +100,7 @@ valdec
 fundec
   : ID fnArgs OP exp %where ( OP = "=" ) => ( A.Valdec(A.Name(ref (A.create_symbol ID)), true, A.Fn(fnArgs, exp)) )
   ;
+
+blockDecl
+  : KW_decl ID => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
+  ; 

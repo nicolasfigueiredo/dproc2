@@ -6,6 +6,10 @@
 %let id = {letter}({letter} | {digit} | "'" | "_")*;
 %let op = ("<" | ">" | "+" | "-" | "^" | "*" | "=")+;
 
+%let float = {int}"."{int}
+%let decl = ("int" | "float" | "bool" | "column" | "table")
+
+
 %states CON_STRING;
 
 %defs (
@@ -14,6 +18,11 @@
   fun eof() = T.EOF
   val stringbuf = ref "";
 );
+
+<INITIAL> {float} => ( T.CON_float (valOf (Real.fromString yytext)) );
+<INITIAL> {decl} => ( T.KW_decl yytext );
+
+
 
 <INITIAL> let => ( T.KW_let );
 <INITIAL> in => ( T.KW_in );

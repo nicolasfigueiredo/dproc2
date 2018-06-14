@@ -3,6 +3,9 @@ structure Helpers =
 
     structure MUML = MumlParseFn(MumlLexer)
 
+    fun isEOF(MumlTokens.EOF) = true
+      | isEOF(_) = false
+
     fun string_to_tokens(inputString: string): MumlTokens.token list =
       let
         val initial_strm = MumlLexer.streamifyInstream (TextIO.openString inputString)
@@ -12,7 +15,7 @@ structure Helpers =
             val lex_result = lexer strm
             val next_token = #1 lex_result
           in
-            if next_token = MumlTokens.EOF
+            if isEOF(next_token)
             then []
             else next_token :: dowork(#3 lex_result)
           end
