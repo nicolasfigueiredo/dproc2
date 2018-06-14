@@ -22,24 +22,25 @@
 %start exp;
 
 exp
-  : %try blockExp SEMI expsequence => ( A.Sequence(blockExp :: expsequence) )
+  : %try declSequence expsequence SEMI => ( A.Sequence(declSequence @ expsequence ))
+  | %try blockExp SEMI expsequence SEMI => ( A.Sequence(blockExp :: expsequence) )
   | %try blockExp
-  | %try blockDecl SEMI declSequence => ( A.Sequence(blockDecl :: declSequence) )
+  | %try blockDecl declSequence => ( A.Sequence(blockDecl :: declSequence) )
   | blockDecl SEMI => ( blockDecl )
   ;
 
 expsequence
   : %try blockExp SEMI expsequence => ( blockExp :: expsequence )
-  | %try blockExp => ( [blockExp] )
+  | %try blockExp SEMI => ( [blockExp] )
   ;
 
 declSequence
-  : %try blockDecl SEMI declSequence => ( blockDecl :: declSequence )
+  : %try blockDecl declSequence => ( blockDecl :: declSequence )
   | %try blockDecl => ( [blockDecl] )
   ;
 
   blockDecl
-  : KW_decl ID => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
+  : KW_decl ID SEMI => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
   ;
 
 blockExp

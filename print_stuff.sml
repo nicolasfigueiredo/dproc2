@@ -2,4 +2,4 @@
 
 fun makeTest(input: string): Ast.Exp = Helpers.string_to_ast(input);
 
-val a = makeTest("int x; column y");
+val a = makeTest("2+3");
