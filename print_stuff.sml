@@ -2,4 +2,4 @@
 
 fun makeTest(input: string): Ast.Exp = Helpers.string_to_ast(input);
 
-val a = makeTest("5;");
+val a = makeTest("int a; column b; 2+3; max(2, 5, 2, 5+2, \"sergio\");");

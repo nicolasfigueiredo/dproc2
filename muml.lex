@@ -8,6 +8,8 @@
 
 %let float = {int}"."{int}
 %let decl = ("int" | "float" | "bool" | "column" | "table")
+%let func = ("max" | "min")
+
 
 
 %states CON_STRING;
@@ -21,7 +23,8 @@
 
 <INITIAL> {float} => ( T.CON_float (valOf (Real.fromString yytext)) );
 <INITIAL> {decl} => ( T.KW_decl yytext );
-
+<INITIAL> {func} => ( T.KW_func yytext );
+<INITIAL> teste => ( T.KW_teste );
 
 
 <INITIAL> let => ( T.KW_let );
