@@ -25,6 +25,7 @@ Ast = struct
     | Fn of Arg list * Exp
     | Valdec of Arg * bool * Exp
     | FuncExp of Exp list
+    | Assign of Exp * Exp
     ;
 
   datatype BaseKind =

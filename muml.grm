@@ -16,16 +16,25 @@
   | ARROW ("=>") | TARROW ("->")
 
 
-  | CON_float of real | KW_decl of string | KW_func of string | KW_teste ("teste")
+  | CON_float of real | KW_decl of string | KW_func of string | KW_teste ("teste") | ASSIGN ("=")
   ;
 
 %start exp;
 
-exp
+(*exp
   : %try declSequence expsequence SEMI => ( A.Sequence(declSequence @ expsequence ))
   | %try blockExp SEMI expsequence  SEMI => ( A.Sequence(blockExp :: expsequence) )
   | %try blockExp SEMI
   | %try blockDecl declSequence => ( A.Sequence(blockDecl :: declSequence) )
+  | blockDecl => ( blockDecl )
+  ;*)
+
+exp
+  : %try declSequence cmdSequence SEMI => ( A.Sequence(declSequence @ cmdSequence ))
+  | %try blockCmd SEMI cmdSequence  SEMI => ( A.Sequence(blockCmd :: cmdSequence) )
+  | %try blockExp SEMI
+  | %try blockDecl declSequence => ( A.Sequence(blockDecl :: declSequence) )
+  | %try blockCmd SEMI
   | blockDecl => ( blockDecl )
   ;
 
@@ -33,6 +42,22 @@ expsequence
   : %try blockExp SEMI expsequence => ( blockExp :: expsequence )
   | %try blockExp => ( [blockExp] )
   ;
+
+blockExp
+  : KW_fn fnArgs ARROW blockExp => ( A.Fn(fnArgs, blockExp) )
+  | KW_if opExp KW_then opExp KW_else opExp => ( A.IfThenElse(opExp1, opExp2, opExp3) )
+  | opExp
+  ;
+
+blockCmd
+  : ID ASSIGN opExp => ( A.Assign(A.Variable(ref (A.create_symbol ID)), opExp) )
+  ;
+
+cmdSequence
+  : %try blockCmd SEMI cmdSequence => ( blockCmd :: cmdSequence)
+  | %try blockCmd => ( [blockCmd] )
+  ;
+
 
 declSequence
   : %try blockDecl declSequence => ( blockDecl :: declSequence )
@@ -43,16 +68,11 @@ declSequence
   : KW_decl ID SEMI => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, A.IntConstant(0)) )
   ;
 
-blockExp
-  : KW_fn fnArgs ARROW blockExp => ( A.Fn(fnArgs, blockExp) )
-  | KW_if opExp KW_then opExp KW_else opExp => ( A.IfThenElse(opExp1, opExp2, opExp3) )
-  | func_apply
-  | opExp
-  ;
 
 opExp
   : %try appExps OP opExp => ( A.InfixApp(appExps, OP, opExp) )
   | %try appExps
+  | %try func_apply
   ;
 
 appExps
@@ -111,13 +131,13 @@ declist
   ;
 
 dec
-  : KW_val valdec
-  | KW_fun fundec
+  (*: KW_val valdec*)
+  : KW_fun fundec
   ;
 
-valdec
+(*valdec
   : ID OP exp %where ( OP = "=" ) => ( A.Valdec(A.Name(ref (A.create_symbol ID)), false, exp) )
-  ;
+  ;*)
 
 fundec
   : ID fnArgs OP exp %where ( OP = "=" ) => ( A.Valdec(A.Name(ref (A.create_symbol ID)), true, A.Fn(fnArgs, exp)) )

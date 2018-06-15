@@ -4,7 +4,7 @@
 %let int = {digit}+;
 %let letter = [a-zA-Z];
 %let id = {letter}({letter} | {digit} | "'" | "_")*;
-%let op = ("<" | ">" | "+" | "-" | "^" | "*" | "=")+;
+%let op = ("<" | ">" | "+" | "-" | "^" | "*")+;
 
 %let float = {int}"."{int}
 %let decl = ("int" | "float" | "bool" | "column" | "table")
@@ -25,7 +25,7 @@
 <INITIAL> {decl} => ( T.KW_decl yytext );
 <INITIAL> {func} => ( T.KW_func yytext );
 <INITIAL> teste => ( T.KW_teste );
-
+<INITIAL> "=" => ( T.ASSIGN ) 
 
 <INITIAL> let => ( T.KW_let );
 <INITIAL> in => ( T.KW_in );
