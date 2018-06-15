@@ -23,15 +23,15 @@
 
 exp
   : %try declSequence expsequence SEMI => ( A.Sequence(declSequence @ expsequence ))
-  | %try blockExp SEMI expsequence SEMI => ( A.Sequence(blockExp :: expsequence) )
-  | %try blockExp
+  | %try blockExp SEMI expsequence  SEMI => ( A.Sequence(blockExp :: expsequence) )
+  | %try blockExp SEMI
   | %try blockDecl declSequence => ( A.Sequence(blockDecl :: declSequence) )
-  | blockDecl SEMI => ( blockDecl )
+  | blockDecl => ( blockDecl )
   ;
 
 expsequence
   : %try blockExp SEMI expsequence => ( blockExp :: expsequence )
-  | %try blockExp SEMI => ( [blockExp] )
+  | %try blockExp => ( [blockExp] )
   ;
 
 declSequence
