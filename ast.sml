@@ -11,6 +11,7 @@ Ast = struct
   datatype Exp =
       IntConstant of int
     | StringConstant of string
+    | BoolConstant of bool
     | Unit
     | Variable of Symbol ref
     | App of Exp * Exp
@@ -24,8 +25,10 @@ Ast = struct
     | LetIn of Exp list * Exp
     | Fn of Arg list * Exp
     | Valdec of Arg * bool * Exp
-    | FuncExp of Exp list
+    | FuncExp of string * Exp list
     | Assign of Exp * Exp
+    | LogApp of Exp * string * Exp
+    | RelApp of Exp * string * Exp
     ;
 
   datatype BaseKind =
