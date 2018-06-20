@@ -1,4 +1,4 @@
-%name MumlLexer;
+%name DprocLexer;
 
 %let digit = [0-9];
 %let int = {digit}+;
@@ -18,7 +18,7 @@
 %states CON_STRING;
 
 %defs (
-  structure T = MumlTokens
+  structure T = DprocTokens
   type lex_result = T.token
   fun eof() = T.EOF
   val stringbuf = ref "";
@@ -28,7 +28,7 @@
 <INITIAL> {decl} => ( T.KW_decl yytext );
 <INITIAL> {func} => ( T.KW_func yytext );
 <INITIAL> teste => ( T.KW_teste );
-<INITIAL> "=" => ( T.ASSIGN )
+<INITIAL> "=" => ( T.ASSIGN );
 <INITIAL> {op_rel} => ( T.OP_rel yytext);
 <INITIAL> {op_log} => ( T.OP_log yytext);
 <INITIAL> {bool} => (T.CON_bool (valOf (Bool.fromString yytext)) );

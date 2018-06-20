@@ -1,4 +1,4 @@
-%name Muml;
+%name Dproc;
 
 %defs (
   structure A = Ast

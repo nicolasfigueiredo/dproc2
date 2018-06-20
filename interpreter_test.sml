@@ -10,6 +10,6 @@ fun makeTest(input: string): Ast.Exp = Helpers.string_to_ast(input);
 (*val a = makeTest(
 	"table tab; column comp; column renda_mensal; column renda_mensal_pcpt; float renda_media; tab = load(\"data.csv\", \"Dados demográficos\"); renda_media = media(renda_mensal);");*)
 
+val a = makeTest("5;");
 
-val a = makeTest("int a;");
-
+val b = Ast.eval(a);

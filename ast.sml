@@ -31,6 +31,12 @@ Ast = struct
     | RelApp of Exp * string * Exp
     ;
 
+  datatype Value = Int_v of int
+    | String_v of string
+    | Float_v of real
+    | Bool_v of bool
+    ;
+
   datatype BaseKind =
       KInt
     | KString
@@ -168,5 +174,28 @@ Ast = struct
       | Valdec(name, recursive, body) =>
           (if recursive then "fun " else "val ") ^ toString_arg(name) ^ " = " ^ (parenthise body)
     end
+
+    fun eval(e:Exp):Value =
+      case e of
+        IntConstant i => Int_v i  |
+        StringConstant s => String_v s |
+        BoolConstant b => Bool_v b |
+        InfixApp(e1, s, e2) => eval_binop(eval(e1), s, eval(e2))
+
+    and eval_binop(v1:Value, s:string, v2:Value):Value =
+      case (v1, s, v2) of
+        (Int_v i1, "+", Int_v i2) => Int_v(i1+i2) |
+        (Int_v i1, "-", Int_v i2) => Int_v(i1-i2) |
+        (Int_v i1, "*", Int_v i2) => Int_v(i1*i2) |
+        (Int_v i1, "/", Int_v i2) => Int_v(i1 div i2) |
+        (Int_v i1, ">", Int_v i2) => Bool_v(i1 > i2) |
+        (Int_v i1, ">=", Int_v i2) => Bool_v(i1 >= i2) |
+        (Int_v i1, "<", Int_v i2) => Bool_v(i1 < i2) |
+        (Int_v i1, "<=", Int_v i2) => Bool_v(i1 <= i2) |
+        (Int_v i1, "==", Int_v i2) => Bool_v(i1 = i2) |
+        (Int_v i1, "!=", Int_v i2) => Bool_v(i1 <> i2) |
+        
+        (String_v s1, "+", String_v s2) => String_v(s1 ^ s2)
+        ;
 
 end

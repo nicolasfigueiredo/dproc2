@@ -1,15 +1,15 @@
 structure Helpers =
   struct
 
-    structure MUML = MumlParseFn(MumlLexer)
+    structure DPROC = DprocParseFn(DprocLexer)
 
-    fun isEOF(MumlTokens.EOF) = true
+    fun isEOF(DprocTokens.EOF) = true
       | isEOF(_) = false
 
-    fun string_to_tokens(inputString: string): MumlTokens.token list =
+    fun string_to_tokens(inputString: string): DprocTokens.token list =
       let
-        val initial_strm = MumlLexer.streamifyInstream (TextIO.openString inputString)
-        val lexer = MumlLexer.lex (AntlrStreamPos.mkSourcemap())
+        val initial_strm = DprocLexer.streamifyInstream (TextIO.openString inputString)
+        val lexer = DprocLexer.lex (AntlrStreamPos.mkSourcemap())
         fun dowork(strm) =
           let
             val lex_result = lexer strm
@@ -25,9 +25,9 @@ structure Helpers =
 
     fun string_to_ast(inputString: string): Ast.Exp =
       let
-        val strm = MumlLexer.streamifyInstream (TextIO.openString inputString)
-        val lexer = MumlLexer.lex (AntlrStreamPos.mkSourcemap())
-        val (r, strm', errs) = MUML.parse lexer strm
+        val strm = DprocLexer.streamifyInstream (TextIO.openString inputString)
+        val lexer = DprocLexer.lex (AntlrStreamPos.mkSourcemap())
+        val (r, strm', errs) = DPROC.parse lexer strm
       in
         (case r
           of SOME(exp) => exp
