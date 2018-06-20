@@ -46,7 +46,7 @@ expsequence
 
 blockExp
   (*: KW_fn fnArgs ARROW blockExp => ( A.Fn(fnArgs, blockExp) )*)
-  : KW_if opExp KW_then opExp KW_else opExp => ( A.IfThenElse(opExp1, opExp2, opExp3) )
+  : KW_if opExp KW_then blockCmd KW_else blockCmd => ( A.IfThenElse(opExp, blockCmd1, blockCmd2) )
   | opExp
   ;
 
