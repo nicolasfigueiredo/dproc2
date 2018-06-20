@@ -25,6 +25,7 @@ Ast = struct
     | LetIn of Exp list * Exp
     | Fn of Arg list * Exp
     | Valdec of Arg * bool * Exp
+    | VarDec of string * Exp
     | FuncExp of string * Exp list
     | Assign of Exp * Exp
     | LogApp of Exp * string * Exp
@@ -35,6 +36,8 @@ Ast = struct
     | String_v of string
     | Float_v of real
     | Bool_v of bool
+    | LookupError
+    | EndList
     ;
 
   datatype BaseKind =
@@ -196,6 +199,15 @@ Ast = struct
         (Int_v i1, "!=", Int_v i2) => Bool_v(i1 <> i2) |
         
         (String_v s1, "+", String_v s2) => String_v(s1 ^ s2)
-        ;
+        
+
+(*      and process(e:Exp):Value =
+        case e of
+          Sequence t => eval(hd(t)) |
+          IntConstant i => eval(IntConstant i) |
+          VarDec(id, exp) => store(id, eval(exp))
+
+      and store(label, exp) = (record := [(label, exp)] @ !record);
+      ;*);
 
 end

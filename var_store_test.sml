@@ -6,6 +6,8 @@ datatype Val = Int of int
 	| LookupError
 	| EndList;
 
+datatype Val = Ast.Value;
+
 val record = ref [("", EndList)];
 
 fun isEndList(EndList) = true
@@ -16,10 +18,7 @@ fun isNil(x:(string * Val) list):bool =
 		if isEndList(value) then true else false
 	end
 
-
-
 fun insert(label, exp) = (record := [(label, exp)] @ !record);
-
 
 fun look_up(label:string, rcd:(string * Val) list):Val = 
 	let val (var_label, var_record) = hd(rcd)
@@ -27,10 +26,3 @@ fun look_up(label:string, rcd:(string * Val) list):Val =
 		if var_label = label then var_record else 
 			if isNil(tl(rcd)) then  LookupError else look_up(label, tl(rcd))
 	end
-(*
-fun look_up(label, rcd) = 
-	let val x = 3
-	in 
-		if x = 3 then true else false
-	end*)
-
